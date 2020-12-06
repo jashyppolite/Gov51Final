@@ -1,0 +1,195 @@
+---
+title: "Data Analysis"
+author: "Jasmine Hyppolite Ryan Chung"
+date: "11/16/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(haven)
+```
+
+## R Markdown
+
+
+
+
+Breaking data down by party and gender
+
+```{r Summary Statistics}
+
+anti_a <- read_dta("data/anti_abort replication leg_party_compet 28Jan20.dta")
+
+# Subsets of the data potentially for future use
+women <- subset(anti_a, Female == 1)
+men <- subset(anti_a, Female == 0)
+republicans <- subset(anti_a, party == "R")
+democrats <- subset(anti_a, party == "D")
+
+# ideology scale summary 
+summary(anti_a$np_score_2)
+
+# population proportions of party and gender
+
+table(anti_a$Female, anti_a$party)
+prop.table(table(anti_a$Female, anti_a$party))
+
+
+
+# setting types within gender party so I can use this later
+anti_a$gender_party <- NA
+anti_a$gender_party[anti_a$Female == 1 & anti_a$party == "D"] <- "Dem. Woman"
+anti_a$gender_party[anti_a$Female == 1 & anti_a$party == "R"] <- "Rep. Woman"
+anti_a$gender_party[anti_a$Female == 0 & anti_a$party == "D"] <- "Dem. Man"
+anti_a$gender_party[anti_a$Female == 0 & anti_a$party == "R"] <- "Rep. Man"
+
+```
+
+##  Plots
+
+```{r Main Plots, echo=FALSE}
+# regression: trying to regress 
+lm(anti_a$Female ~ anti_a$bin_anti_fetus)
+# 1% chance of being female increasing support for anti abortion with fetus bill
+
+#two way table
+
+dem_fem <- subset(anti_a, Female == 1 & party == "D")
+dem_male<- subset(anti_a, Female == 0 & party == "D")
+rep_fem <- subset(anti_a, Female == 1 & party == "R")
+rep_male <- subset(anti_a, Female == 0 & party == "R")
+
+# Means  to describe proportions to be used in histograms and bar plots
+
+gender_party_means <- tapply(anti_a$bin_anti_all, anti_a$gender_party, mean)
+party_means <- tapply(anti_a$bin_anti_all, anti_a$party, mean)
+NP_means <- tapply(anti_a$np_score_2, anti_a$gender_party, mean)
+
+# histograms of ideological scale froom 1-7.259, liberal to conservative
+
+hist(x = dem_fem$np_score_2, freq = FALSE,
+     main = "Distribution of Ideology Scores for Democratic Females",
+     xlab = "Ideology Score \n 0 (Most Liberal) - 7.259 (Most Conservative)")
+hist(x = dem_male$np_score_2, freq = FALSE,
+     main = "Distribution of Ideology Scores for Democratic Males",
+     xlab = "Ideology Score \n 0 (Most Liberal) - 7.259 (Most Conservative)")
+hist(x = rep_fem$np_score_2, freq = FALSE,
+     main = "Distribution of Ideology Scores for Republican Females",
+     xlab = "Ideology Score \n 0 (Most Liberal) - 7.259 (Most Conservative)")
+hist(x = rep_male$np_score_2, freq = FALSE,
+     main = "Distribution of Ideology Scores for Republican Males",
+     xlab = "Ideology Score \n 0 (Most Liberal) - 7.259 (Most Conservative)")
+hist(x = women$np_score_2, freq = FALSE,
+     main = "Distribution of Ideology Scores for Female Legislators 1997-2012",
+     xlab = "Ideology Score \n 0 (Most Liberal) - 7.259 (Most Conservative)")
+
+# Bar Plot for gender and party distribution of voting for at least one anti-abortion bill
+
+barplot(gender_party_means,
+        main = "Distribution of Voting for Anti-Abortion Bills by Gender and Party",
+        xlab = "Party and Gender",
+        ylab = "Distribution",
+        col = "steelblue2",
+        border = "white")
+
+# Bar Plot for party distribution of voting for at least one anti-abortion bill
+
+barplot(party_means,
+        main = "Distribution of Anti-Abortion Bill Votes by Party",
+        xlab = "Party",
+        ylab = "Distribution",
+        col = "indianred",
+        border = "white")
+
+# Bar Plot for PG8 score distribution of voting for at least one anti-abortion bill
+
+barplot(NP_means,
+        main = "Distribution of NP Ideology Scores by Party and Gender",
+        xlab = "Gender and Party",
+        ylab = "NP Ideology Score",
+        col = "dodgerblue",
+        border = "white",
+        ylim = c(0,5))
+
+
+```
+
+Here I take some regressions of quantities of interest and did some preliminary interpretations, that candidly, I am very unsure about. 
+
+```{r Regressions}
+# regress both gender and party onto bill votes
+
+# What resonates most by gender? (unsure if these should be proportions 
+# or probabilities)
+
+lm(anti_a$bin_anti_all ~ anti_a$Female)
+# unsure of the order here, but I might interpret this one as 23% of males having 
+# voted for at least one anti-abortion bill. 
+
+gender_all_fit <- lm(anti_a$bin_anti_all ~ anti_a$Female)
+# males are four percent more likely to have voted for at least 
+# one anti abortion bill. or among males, the prop that has
+# supported a bill as such is ~ 4 percent 
+
+
+gender_antiwom_fit<- lm(anti_a$bin_anti_womtot ~ anti_a$Female)
+# Males are 2.3% more likely to have voted for an anti abortion 
+# bill that was pro-woman and pro-life
+
+gender_antirelig_fit <- lm(anti_a$bin_anti_relig ~ anti_a$Female)
+# males are 1.7% more likely to have voted for an anti abortion bill 
+# that adheres to a religious or moral issue frame
+
+gender_antifetus_fit <- lm(anti_a$bin_anti_fetus ~ anti_a$Female)
+#males are 1.3% more likely to have votes for an anti abortion bill that 
+# adheres to a fetal centric issue frame
+
+# What resonates most by ideology?
+
+lm(anti_a$bin_anti_all ~ anti_a$np_score_2)
+# if you increase the np score by one unit, the probability of voting for an 
+# anti abortion bill would be a difference of 3.6 percentage points -> more 
+# conservative, more likely to vote for anti abortion bill at some point 
+
+lm(anti_a$bin_anti_womtot ~ anti_a$np_score_2)
+# if you increase the np score by one unit, the probability of voting for an 
+# anti abortion bill would be a difference of 2.4 percentage points
+# more conservative --> more likely to vote for a pro-life framed
+# anit abortion bill than any other type of anti abortion bill
+
+lm(anti_a$bin_anti_relig ~ anti_a$np_score_2)
+# if you increase the np score by one unit, the probability of voting for an 
+# anti abortion bill would be a difference of 1.5 percentage points
+
+lm(anti_a$bin_anti_fetus ~ anti_a$np_score_2)
+## if you increase the np score by one unit, the probability of voting for an 
+# anti abortion bill would be a difference of 1.2 percentage points
+
+# What resonates most by party?
+
+lm(anti_a$bin_anti_all ~ anti_a$party)
+# r = .05545, is highest out of all parties
+
+lm(anti_a$bin_anti_relig ~ anti_a$party)
+# r = 0.0248, is highest out of all parties, independent is slightly negative
+# and d = .004485
+
+lm(anti_a$bin_anti_fetus ~ anti_a$party)
+# r = .020949, highest of all again, I is negative and d is positive but 
+# closer to zero
+
+lm(anti_a$bin_anti_womtot ~ anti_a$party)
+# I = .039299, I is surprisingly the highest here, followed by R, and then D
+
+lm(anti_a$bin_anti_all ~ anti_a$rep_control)
+
+fit_g_party <- lm(anti_a$bin_anti_all ~ anti_a$Female + anti_a$party)
+
+stargazer::stargazer(fit_g_party, title = "Gender and Party",
+                     covariate.labels = c("Gender (Female)", "Party"),
+                     dep.var.labels = "Sponsorship of at least one anti-abortion bill",
+                     header = FALSE)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
