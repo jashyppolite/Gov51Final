@@ -20,7 +20,6 @@ Breaking data down by party and gender
 ```{r Summary Statistics}
 
 anti_a <- read_dta("data/anti_abort replication leg_party_compet 28Jan20.dta")
-
 # Subsets of the data potentially for future use
 women <- subset(anti_a, Female == 1)
 men <- subset(anti_a, Female == 0)
@@ -185,6 +184,10 @@ lm(anti_a$bin_anti_womtot ~ anti_a$party)
 lm(anti_a$bin_anti_all ~ anti_a$rep_control)
 
 fit_g_party <- lm(anti_a$bin_anti_all ~ anti_a$Female + anti_a$party)
+
+ideology_fit <- lm(anti_a$bin_anti_all ~ anti_a$np_score_2)
+
+plot(anti_a$Female, anti_a$np_score_2)
 
 stargazer::stargazer(fit_g_party, title = "Gender and Party",
                      covariate.labels = c("Gender (Female)", "Party"),
