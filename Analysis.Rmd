@@ -1,6 +1,6 @@
 ---
 title: "Data Analysis"
-author: "Jasmine Hyppolite Ryan Chung"
+author: "Jasmine Hyppolite and Ryan Chung"
 date: "11/16/2020"
 output: pdf_document
 ---
@@ -65,6 +65,8 @@ gender_party_means <- tapply(anti_a$bin_anti_all, anti_a$gender_party, mean)
 party_means <- tapply(anti_a$bin_anti_all, anti_a$party, mean)
 NP_means <- tapply(anti_a$np_score_2, anti_a$gender_party, mean)
 
+gender_party_means_2 <- tapply(anti_a$bin_anti_all, anti_a$IPG8, mean)
+
 # histograms of ideological scale froom 1-7.259, liberal to conservative
 
 hist(x = dem_fem$np_score_2, freq = FALSE,
@@ -87,6 +89,14 @@ hist(x = women$np_score_2, freq = FALSE,
 
 barplot(gender_party_means,
         main = "Distribution of Voting for Anti-Abortion Bills by Gender and Party",
+        xlab = "Party and Gender",
+        ylab = "Distribution",
+        col = "steelblue2",
+        border = "white")
+
+barplot(gender_party_means_2,
+        main = "Distribution of Voting for Anti-Abortion Bills by Gender and Party",
+        names.arg = c("Cons RW", "Cons RM", "Mod-Lib RW", "Mod-Lib RM", "Mod-Cons DM", "Mod-Cons DW", "Lib DM", "Lib DW"),
         xlab = "Party and Gender",
         ylab = "Distribution",
         col = "steelblue2",
@@ -199,6 +209,46 @@ stargazer::stargazer(fit_g_party, title = "Gender and Party",
                      covariate.labels = c("Gender (Female)", "Party"),
                      dep.var.labels = "Sponsorship of at least one anti-abortion bill",
                      header = FALSE)
+```
+
+
+```{r}
+score_all_interaction_fit <- lm(bin_anti_all ~ np_score_2*rep_control, data = anti_a)
+score_all_interaction_fit
+#Assuming Democratic control of the state house or a 50-50 split, a one unit increase in np score leads to around a 2.6 percentage point increase in the likelihood of sponsorship of at least one anti-abortion bill
+#This is lower than the percentage point increase in the regression of just bin_anti_all on np_score_2
+
+score_womtot_interaction_fit <- lm(bin_anti_womtot ~ np_score_2*rep_control, data = anti_a)
+score_womtot_interaction_fit
+score_fetus_interaction_fit <- lm(bin_anti_fetus ~ np_score_2*rep_control, data = anti_a)
+score_fetus_interaction_fit
+score_relig_interaction_fit <- lm(bin_anti_relig ~ np_score_2*rep_control, data = anti_a)
+score_relig_interaction_fit
+#Adding the interaction between np_score_2 and rep_control always decreases the likelihood of sponsorship of at least one anti-abortion bill,albeit to different extents
+
+
+summary(score_all_interaction_fit)
+#doesn't appear to be statistically significant at an alpha of 0.05, but still worth mentioning
+#this actually might support our hypothesis better because we can say that although there is some decrease in sponsorship when there is Democratic control
+
+
+
+female_all_interaction_fit <- lm(bin_anti_all ~ Female*competitive, data = anti_a)
+female_all_interaction_fit
+
+female_womtot_interaction_fit <- lm(bin_anti_womtot ~ Female*competitive, data = anti_a)
+female_womtot_interaction_fit
+female_fetus_interaction_fit <- lm(bin_anti_fetus ~ Female*competitive, data = anti_a)
+female_fetus_interaction_fit
+female_relig_interaction_fit <- lm(bin_anti_relig ~ Female*competitive, data = anti_a)
+female_relig_interaction_fit
+
+summary(female_all_interaction_fit)
+#statistically significant interaction coefficient, not sure what narrative we would talk about here
+
+
+summary(lm(bin_anti_all ~ np_score_2*competitive, data = anti_a))
+#very statistically significant interaction coefficient, and based on this and the last regression, competitive seems to be a pretty strong marker
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
