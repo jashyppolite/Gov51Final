@@ -17,7 +17,7 @@ library(haven)
 
 Breaking data down by party and gender
 
-```{r Summary Statistics}
+```{r Summary Statistics} 
 
 anti_a <- read_dta("data/anti_abort replication leg_party_compet 28Jan20.dta")
 # Subsets of the data potentially for future use
@@ -111,7 +111,6 @@ barplot(NP_means,
         border = "white",
         ylim = c(0,5))
 
-
 ```
 
 Here I take some regressions of quantities of interest and did some preliminary interpretations, that candidly, I am very unsure about. 
@@ -187,7 +186,14 @@ fit_g_party <- lm(anti_a$bin_anti_all ~ anti_a$Female + anti_a$party)
 
 ideology_fit <- lm(anti_a$bin_anti_all ~ anti_a$np_score_2)
 
-plot(anti_a$Female, anti_a$np_score_2)
+boxplot(anti_a$Female, anti_a$np_score_2,
+        names = c("Female", "Male"),
+        ylab = "Ideology Score",
+        xlab = "Sex")
+
+complex <- lm(anti_a$bin_anti_all ~ anti_a$party + anti_a$Female + anti_a$competitive)
+complex
+
 
 stargazer::stargazer(fit_g_party, title = "Gender and Party",
                      covariate.labels = c("Gender (Female)", "Party"),
