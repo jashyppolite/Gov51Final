@@ -95,7 +95,7 @@ barplot(gender_party_means,
         border = "white")
 
 barplot(gender_party_means_2,
-        main = "Distribution of Voting for Anti-Abortion Bills by Gender and Party",
+        main = "Distribution of Voting for Anti-Abortion Bills by Gender and Composite Measure",
         names.arg = c("Cons RW", "Cons RM", "Mod-Lib RW", "Mod-Lib RM", "Mod-Cons DM", "Mod-Cons DW", "Lib DM", "Lib DW"),
         xlab = "Party and Gender",
         ylab = "Distribution",
@@ -121,6 +121,19 @@ barplot(NP_means,
         border = "white",
         ylim = c(0,5))
 
+```
+```{r, Distributions based on different type of abortion bills}
+a <- tapply(anti_a$bin_anti_womtot, anti_a$IPG8, mean)
+barplot(a)
+
+b <- tapply(anti_a$bin_anti_fetus, anti_a$IPG8, mean)
+barplot(b)
+
+c <- tapply(anti_a$bin_anti_relig, anti_a$IPG8, mean)
+barplot(c)
+
+d <- tapply(anti_a$bin_pro_all, anti_a$IPG8, mean)
+barplot(d)
 ```
 
 Here I take some regressions of quantities of interest and did some preliminary interpretations, that candidly, I am very unsure about. 
@@ -205,7 +218,7 @@ boxplot(np_score_2 ~ Female, data = anti_a,
         frame = FALSE)
 
 complex <- lm(anti_a$bin_anti_all ~ anti_a$party + anti_a$Female + anti_a$competitive)
-complex
+summary(complex)
 
 
 stargazer::stargazer(fit_g_party, title = "Gender and Party",
@@ -252,6 +265,9 @@ summary(female_all_interaction_fit)
 
 summary(lm(bin_anti_all ~ np_score_2*competitive, data = anti_a))
 #very statistically significant interaction coefficient, and based on this and the last regression, competitive seems to be a pretty strong marker
+
+summary(lm(bin_anti_all ~ competitive*party*Female, data = anti_a))
+#don't know how we would incorporate this one, but it may be interesting to paint the narrative that Republican women in a competitive political environment are forced to vote a certain way by their party (or we can talk about them being the hidden majority because we typically conjure an image of white conservative men being resistant to social change)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
