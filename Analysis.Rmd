@@ -8,6 +8,7 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(haven)
+library(dplyr)
 ```
 
 ## R Markdown
@@ -19,7 +20,8 @@ Breaking data down by party and gender
 
 ```{r Summary Statistics} 
 
-anti_a <- read_dta("data/anti_abort replication leg_party_compet 28Jan20.dta")
+anti_a <- read_dta("data/anti_abort replication leg_party_compet 28Jan20.dta") 
+
 # Subsets of the data potentially for future use
 women <- subset(anti_a, Female == 1)
 men <- subset(anti_a, Female == 0)
@@ -31,10 +33,18 @@ summary(anti_a$np_score_2)
 
 # population proportions of party and gender
 
-table(anti_a$Female, anti_a$party)
-prop.table(table(anti_a$Female, anti_a$party))
+genderparty_table <- table("Female" = anti_a$Female, "Party" = anti_a$party)
+gender_prop <- prop.table(table("Female" = anti_a$Female))
+genderparty_prop <- round(prop.table(
+        table("Sex and Party" = anti_a$gender_party))*100,
+        digits = 2)
+ipg8_prop <- round(prop.table(table("IPG8" = anti_a$IPG8))*100, digits = 2)
 
-
+# Summary Statistics Table
+genderparty_table
+gender_prop
+genderparty_prop
+ipg8_prop
 
 # setting types within gender party so I can use this later
 anti_a$gender_party <- NA
@@ -122,6 +132,7 @@ barplot(NP_means,
         ylim = c(0,5))
 
 ```
+
 ```{r, Distributions based on different type of abortion bills}
 a <- tapply(anti_a$bin_anti_womtot, anti_a$IPG8, mean)
 barplot(a)
@@ -134,6 +145,8 @@ barplot(c)
 
 d <- tapply(anti_a$bin_pro_all, anti_a$IPG8, mean)
 barplot(d)
+
+
 ```
 
 Here I take some regressions of quantities of interest and did some preliminary interpretations, that candidly, I am very unsure about. 
