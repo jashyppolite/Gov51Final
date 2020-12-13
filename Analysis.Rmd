@@ -74,7 +74,6 @@ rep_male <- subset(anti_a, Female == 0 & party == "R")
 gender_party_means <- tapply(anti_a$bin_anti_all, anti_a$gender_party, mean)
 party_means <- tapply(anti_a$bin_anti_all, anti_a$party, mean)
 NP_means <- tapply(anti_a$np_score_2, anti_a$gender_party, mean)
-
 gender_party_means_2 <- tapply(anti_a$bin_anti_all, anti_a$IPG8, mean)
 
 # histograms of ideological scale froom 1-7.259, liberal to conservative
@@ -110,7 +109,8 @@ barplot(gender_party_means_2,
         xlab = "Party and Gender",
         ylab = "Distribution",
         col = "steelblue2",
-        border = "white")
+        border = "white",
+        cex.names = 0.5)
 
 # Bar Plot for party distribution of voting for at least one anti-abortion bill
 
@@ -253,7 +253,7 @@ score_fetus_interaction_fit <- lm(bin_anti_fetus ~ np_score_2*rep_control, data 
 score_fetus_interaction_fit
 score_relig_interaction_fit <- lm(bin_anti_relig ~ np_score_2*rep_control, data = anti_a)
 score_relig_interaction_fit
-#Adding the interaction between np_score_2 and rep_control always decreases the likelihood of sponsorship of at least one anti-abortion bill,albeit to different extents
+#Adding the interaction between np_score_2 and rep_control always decreases the likelihood of sponsorship of at least one anti-abortion bill, albeit to different extents
 
 
 summary(score_all_interaction_fit)
@@ -266,11 +266,11 @@ female_all_interaction_fit <- lm(bin_anti_all ~ Female*competitive, data = anti_
 summary(female_all_interaction_fit)
 
 female_womtot_interaction_fit <- lm(bin_anti_womtot ~ Female*competitive, data = anti_a)
-female_womtot_interaction_fit
+summary(female_womtot_interaction_fit)
 female_fetus_interaction_fit <- lm(bin_anti_fetus ~ Female*competitive, data = anti_a)
-female_fetus_interaction_fit
+summary(female_fetus_interaction_fit)
 female_relig_interaction_fit <- lm(bin_anti_relig ~ Female*competitive, data = anti_a)
-female_relig_interaction_fit
+summary(female_relig_interaction_fit)
 
 summary(female_all_interaction_fit)
 #statistically significant interaction coefficient, not sure what narrative we would talk about here
