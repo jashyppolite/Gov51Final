@@ -24,10 +24,10 @@ summary(anti_a$np_score_2)
 
 # population proportions of party and gender
 
-<<<<<<< HEAD
+
 table(anti_a$Female, anti_a$party)
 prop.table(table(anti_a$Female, anti_a$party))
-=======
+
 genderparty_table <- table("Female" = anti_a$Female, "Party" = anti_a$party)
 gender_prop <- prop.table(table("Female" = anti_a$Female))
 genderparty_prop <- round(prop.table(
@@ -41,7 +41,7 @@ genderparty_table
 gender_prop
 genderparty_prop
 ipg8_prop
->>>>>>> 5e533607ff5856f7ab1d3a1560f874e545fad1a4
+
 
 # setting types within gender party so I can use this later
 anti_a$gender_party <- NA
@@ -80,19 +80,47 @@ barplot(gender_party_means_2,
 # Further Breakdowns
 a <- tapply(anti_a$bin_anti_womtot, anti_a$IPG8, mean)
 barplot(a,
-        main = "Distribution of Voting for Anti-Abortion Bills (Pro-Life, Pro-Woman)")
+        main = "Distribution of Voting for Anti-Abortion Bills (Pro-Life, Pro-Woman)",
+        names.arg = c("Cons RW", "Cons RM", "Mod-Lib RW", "Mod-Lib RM", "Mod-Cons DM", "Mod-Cons DW", "Lib DM", "Lib DW"),
+        xlab = "Party and Gender",
+        ylab = "Distribution",
+        col = "mediumpurple",
+        border = "white",
+        cex.names = 0.5,
+        cex.main = 0.9)
 
 b <- tapply(anti_a$bin_anti_fetus, anti_a$IPG8, mean)
 barplot(b,
-        main = "Distribution of Voting for Anti-Abortion Bills (Fetal)")
+        main = "Distribution of Voting for Anti-Abortion Bills (Fetal)",
+        names.arg = c("Cons RW", "Cons RM", "Mod-Lib RW", "Mod-Lib RM", "Mod-Cons DM", "Mod-Cons DW", "Lib DM", "Lib DW"),
+        xlab = "Party and Gender",
+        ylab = "Distribution",
+        col = "goldenrod3",
+        border = "white",
+        cex.names = 0.5,
+        cex.main = 0.9)
 
 c <- tapply(anti_a$bin_anti_relig, anti_a$IPG8, mean)
 barplot(c,
-        main = "Distribution of Voting for Anti-Abortion Bills (Religion)")
+        main = "Distribution of Voting for Anti-Abortion Bills (Religion)",
+        names.arg = c("Cons RW", "Cons RM", "Mod-Lib RW", "Mod-Lib RM", "Mod-Cons DM", "Mod-Cons DW", "Lib DM", "Lib DW"),
+        xlab = "Party and Gender",
+        ylab = "Distribution",
+        col = "firebrick",
+        border = "white",
+        cex.names = 0.5,
+        cex.main = 0.9)
 
 d <- tapply(anti_a$bin_pro_all, anti_a$IPG8, mean)
 barplot(d,
-        main = "Distribution of Voting for Pro-Abortion Bills")
+        main = "Distribution of Voting for Pro-Abortion Bills",
+        names.arg = c("Cons RW", "Cons RM", "Mod-Lib RW", "Mod-Lib RM", "Mod-Cons DM", "Mod-Cons DW", "Lib DM", "Lib DW"),
+        xlab = "Party and Gender",
+        ylab = "Distribution",
+        col = "springgreen4",
+        border = "white",
+        cex.names = 0.5,
+        cex.main = 0.9)
 
 
 # Bar Plot for party distribution of voting for at least one anti-abortion bill
@@ -113,10 +141,9 @@ boxplot(np_score_2 ~ Female, data = anti_a,
         las = 1, col = "violetred2",
         frame = FALSE)
 ```
-<<<<<<< HEAD
-=======
 
->>>>>>> 5e533607ff5856f7ab1d3a1560f874e545fad1a4
+
+
 ```{r Regressions}
 lm(anti_a$bin_anti_all ~ anti_a$Female)
 
@@ -124,7 +151,7 @@ lm(anti_a$bin_anti_all ~ anti_a$np_score_2)
 
 lm(anti_a$bin_anti_all ~ anti_a$party)
 
-<<<<<<< HEAD
+
 female_all_interaction_fit <- lm(bin_anti_all ~ Female*competitive, data = anti_a)
 summary(female_all_interaction_fit)
 female_womtot_interaction_fit <- lm(bin_anti_womtot ~ Female*competitive, data = anti_a)
@@ -133,7 +160,7 @@ female_fetus_interaction_fit <- lm(bin_anti_fetus ~ Female*competitive, data = a
 summary(female_fetus_interaction_fit)
 female_relig_interaction_fit <- lm(bin_anti_relig ~ Female*competitive, data = anti_a)
 summary(female_relig_interaction_fit)
-=======
+
 female_all_interaction_fit <- 
         lm(bin_anti_all ~ Female*competitive, data = anti_a)
 summary(female_all_interaction_fit)
@@ -199,7 +226,7 @@ stargazer::stargazer(complex,
                                           "Covariate 3"),
                      dep.var.labels = "Informative name of the dependent variable",
                      header = FALSE)
->>>>>>> 5e533607ff5856f7ab1d3a1560f874e545fad1a4
+
 ```
 
 
@@ -272,12 +299,11 @@ lm(anti_a$bin_anti_fetus ~ anti_a$party)
 lm(anti_a$bin_anti_womtot ~ anti_a$party)
 # I = .039299, I is surprisingly the highest here, followed by R, and then D
 
-<<<<<<< HEAD
+
 complex <- lm(anti_a$bin_anti_all ~ anti_a$party + anti_a$Female + anti_a$competitive)
 summary(complex)
 
-=======
->>>>>>> 5e533607ff5856f7ab1d3a1560f874e545fad1a4
+
 score_all_interaction_fit <- lm(bin_anti_all ~ np_score_2*rep_control, data = anti_a)
 score_all_interaction_fit
 #Assuming Democratic control of the state house or a 50-50 split, a one unit increase in np score leads to around a 2.6 percentage point increase in the likelihood of sponsorship of at least one anti-abortion bill
