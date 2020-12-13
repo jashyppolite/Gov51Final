@@ -7,6 +7,8 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(haven)
+library(dplyr)
 ```
 
 ## R Markdown
@@ -145,11 +147,14 @@ boxplot(np_score_2 ~ Female, data = anti_a,
 
 
 ```{r Regressions}
-lm(anti_a$bin_anti_all ~ anti_a$Female)
+female_all_fit <- lm(anti_a$bin_anti_all ~ anti_a$Female)
+summary(female_all_fit)
 
-lm(anti_a$bin_anti_all ~ anti_a$np_score_2)
+np_all_fit <- lm(anti_a$bin_anti_all ~ anti_a$np_score_2)
+summary(np_all_fit)
 
-lm(anti_a$bin_anti_all ~ anti_a$party)
+party_all_fit <- lm(anti_a$bin_anti_all ~ anti_a$party)
+summary(party_all_fit)
 
 
 female_all_interaction_fit <- lm(bin_anti_all ~ Female*competitive, data = anti_a)
