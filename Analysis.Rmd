@@ -122,6 +122,7 @@ barplot(NP_means,
         ylim = c(0,5))
 
 ```
+
 ```{r, Distributions based on different type of abortion bills}
 a <- tapply(anti_a$bin_anti_womtot, anti_a$IPG8, mean)
 barplot(a)
