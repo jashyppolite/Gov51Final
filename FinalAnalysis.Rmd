@@ -228,42 +228,51 @@ score_relig_interaction_fit <-
 
 
 stargazer::stargazer(score_all_interaction_fit,
-                     title = "Linear Regression Models for NP Score and Republican Control of State House's 
+                     title = "Linear Regression Models for NP Score
+                     and Republican Control of State House's 
                      Effect on Voting for Anti-Abortion Bills",
                       covariate.labels = c("NP Score",
                                            "Republican Majority in State House",
-                                           "NP Score and Republican Majority in State House Interaction"),
+                                           "NP Score and Republican Majority 
+                                           in State House Interaction"),
                      dep.var.labels = "Voting for an Anti-Abortion Bill",
                      header = FALSE)
 stargazer::stargazer(score_fetus_interaction_fit,
-                     title = "Linear Regression Models for NP Score and Republican Control of State House's 
+                     title = "Linear Regression Models for NP Score 
+                     and Republican Control of State House's 
                      Effect on Voting for Fetal-Centric Anti-Abortion Bills",
                       covariate.labels = c("NP Score",
                                            "Republican Majority in State House",
-                                           "NP Score and Republican Majority in State House Interaction"),
+                                           "NP Score and Republican Majority 
+                                           in State House Interaction"),
                      dep.var.labels = "Voting for Fetal-Centric Anti-Abortion Bills",
                      header = FALSE)
 
 stargazer::stargazer(score_relig_interaction_fit,
-                     title = "Linear Regression Models for NP Score and Republican Control of State House's 
-                     Effect on Voting for Anti-Abortion Bills with a Religious or Moral 
+                     title = "Linear Regression Models for NP Score
+                     and Republican Control of State House's 
+                     Effect on Voting for Anti-Abortion Bills 
+                     with a Religious or Moral 
                      Framework",
                       covariate.labels = c("NP Score",
                                            "Republican Majority in State House",
-                                           "NP Score and Republican Majority in State House Interaction"),
-                     dep.var.labels = "Voting for an Anti-Abortion Bill with a Religious or Moral 
-                     Framework",
+                                           "NP Score and Republican Majority
+                                           in State House Interaction"),
+                     dep.var.labels = "Voting for a Religious or Moral
+                     Anti-Abortion Bill",
                      header = FALSE)
 
 stargazer::stargazer(score_womtot_interaction_fit,
-                     title = "Linear Regression Models for NP Score and Republican Control of State House's 
-                     Effect on Voting for Anti-Abortion Bills with a Pro-Woman Pro-Life
+                     title = "Linear Regression Models for NP Score
+                      and Republican Control of State House's 
+                     Effect on Voting for Anti-Abortion Bills
+                     with a Pro-Woman Pro-Life
                      Framework",
                       covariate.labels = c("NP Score",
                                            "Republican Majority in State House",
-                                           "NP Score and Republican Majority in State House Interaction"),
-                     dep.var.labels = "Voting for an Anti-Abortion Bill with a Pro-Woman Pro-Life
-                     Framework",
+                                           "NP Score and Republican Majority
+                                           in State House Interaction"),
+                     dep.var.labels = "Voting for a Pro-Woman Pro-Life Anti-Abortion Bill",
                      header = FALSE)
 ```
 
