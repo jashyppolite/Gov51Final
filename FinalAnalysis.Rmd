@@ -27,7 +27,7 @@ While it is easy to assume that those who are anti-abortion dont have the abilit
 
 With this, It is also a mistake to assume that all anti-abortion bills are a monolith in the way that they are argued and the grounds on which they stand on. Frameworks of religion, discussion of the “fetus” or “unborn baby,” or “pro-woman,” can have an impact on the way anti-abortion bills are interpreted and thus voted for by different people of different parties, standards, morals, perspectives, and experiences. The research question of this study looks to understand what type of legislators vote most often for anti-abortion bills, and to that, what types of anti abortion bills. 
 
-The hypothesis for this study states that conservative Republican men are most likely to support anti-abortion bills that adhere to a fetal issue frame while conservative Republican women are most likely to support anti-abortion bills that adhere to a “pro-life, pro-woman” issue frame. This study looks to detect if a legislators party, ideology score, competitive partisan environment, and sex have an impact on voting for anti-abortion bills. Analyzing this data set can provide answers to our question by quantifying relationships between certain legislators’ voting patterns and anti-abortion bills, and can allow us to be as specific as the type of abortion bill certain legislators vote for. Using linear models and interpreting their coefficients can help us understand the effect of certain characteristics like party and gender on a legislators decision to vote for an anti abortion bill. 
+The hypothesis for this study states that conservative Republican men are most likely to support anti-abortion bills that adhere to a fetal issue frame while conservative Republican women are most likely to support anti-abortion bills that adhere to a “pro-life, pro-woman” issue frame. We also hypothesize that party will have a stronger effect on support of anti-abortion bills than gender.  This study looks to detect if a legislators party, ideology score, majority party control of the state house, and sex have an impact on voting for anti-abortion bills. Analyzing this data set can provide answers to our question by quantifying relationships between certain legislators’ voting patterns and anti-abortion bills, and can allow us to be as specific as the type of abortion bill certain legislators vote for. Using linear models and interpreting their coefficients can help us understand the effect of certain characteristics like party and gender on a legislators decision to vote for an anti abortion bill. 
 
 ## Data
 
@@ -71,7 +71,7 @@ ipg8_labels <- data.frame(
 )
 
 
-# Summary Statistics 
+# Summary Stats
 
 genderparty_table %>%
   kbl(caption = "Gender and Party Quantities of Population") %>%
@@ -101,15 +101,27 @@ rep_male <- subset(anti_a, Female == 0 & party == "R")
 ```
 
 
-```{r Barplots, echo=FALSE}
+```{r Barplots1, echo=FALSE}
 gender_party_means <- tapply(anti_a$bin_anti_all, anti_a$gender_party, mean)
 party_means <- tapply(anti_a$bin_anti_all, anti_a$party, mean)
 NP_means <- tapply(anti_a$np_score_2, anti_a$gender_party, mean)
 gender_party_means_2 <- tapply(anti_a$bin_anti_all, anti_a$IPG8, mean)
 
 #layout(matrix(c(1,1,2,2), 2, 2, byrow = TRUE))
+#par(mfrow=c(2,2))
 
-#par(mfrow=c(2,1))
+nf <- layout( matrix(c(1,1,
+                       2,3,
+                       2,3), nrow=2, ncol=2, byrow=TRUE) )
+
+# Boxplot for Ideology Score by Sex
+boxplot(np_score_2 ~ Female, data = anti_a,
+        names = c("Female", "Male"),
+        ylab = "Ideology Score",
+        xlab = "Sex",
+        main = "Ideology Score by Sex",
+        las = 1, col = "violetred2",
+        frame = FALSE)
 
 # Bar Plot for NP score distribution of voting for at least one anti-abortion bill
 barplot(NP_means,
@@ -118,7 +130,28 @@ barplot(NP_means,
         ylab = "NP Ideology Score",
         col = "dodgerblue",
         border = "white",
-        ylim = c(0,5))
+        ylim = c(0,5),
+        cex.main = 0.7,
+        cex.names = 0.7)
+
+# Bar Plot for party distribution of voting for at least one anti-abortion bill
+barplot(party_means,
+        main = "Distribution of Anti-Abortion Bill Votes by Party",
+        xlab = "Party",
+        ylab = "Distribution",
+        col = "indianred",
+        border = "white",
+        cex.main = 0.7)
+```
+
+## Analysis
+
+Our main relationship of interest is between sponsorship of anti-abortion bills and gender, ideology, and party.  We find that conservative Republican women are the most likely to sponsor at least one anti-abortion rights bill of any type (insert Distribution of Voting for Anti-Abortion Bills by Gender and Composite Measure).  The group that is least likely to do so is liberal Democratic men, which according to the IPG8 variable, is group 8.  Breaking this down to the three different issue frames, anti-abortion bills that adhere to a “pro-life pro-woman” issue frame see the greatest distribution of support from conservative Republican women, followed by a religious or moral issue frame and, finally, a fetal-centric one.
+
+```{r Barplots2, echo=FALSE}
+nf <- layout( matrix(c(1,1,
+                       2,3,
+                       4,5), nrow=3, ncol=2, byrow=TRUE) )
 
 # Bar Plot for IPG8 score distribution of voting for at least one anti-abortion bill
 barplot(gender_party_means_2,
@@ -128,7 +161,7 @@ barplot(gender_party_means_2,
         ylab = "Distribution",
         col = "steelblue2",
         border = "white",
-        cex.names = 0.5,
+        cex.names = 0.9,
         cex.main = 0.9)
 
 # Further Breakdowns
@@ -140,7 +173,7 @@ barplot(a,
         ylab = "Distribution",
         col = "mediumpurple",
         border = "white",
-        cex.names = 0.5,
+        cex.names = 0.41,
         cex.main = 0.9)
 
 b <- tapply(anti_a$bin_anti_fetus, anti_a$IPG8, mean)
@@ -151,7 +184,7 @@ barplot(b,
         ylab = "Distribution",
         col = "goldenrod3",
         border = "white",
-        cex.names = 0.5,
+        cex.names = 0.41,
         cex.main = 0.9)
 
 c <- tapply(anti_a$bin_anti_relig, anti_a$IPG8, mean)
@@ -162,7 +195,7 @@ barplot(c,
         ylab = "Distribution",
         col = "firebrick",
         border = "white",
-        cex.names = 0.5,
+        cex.names = 0.41,
         cex.main = 0.9)
 
 d <- tapply(anti_a$bin_pro_all, anti_a$IPG8, mean)
@@ -173,54 +206,71 @@ barplot(d,
         ylab = "Distribution",
         col = "springgreen4",
         border = "white",
-        cex.names = 0.5,
+        cex.names = 0.41,
         cex.main = 0.9)
-
-
-# Bar Plot for party distribution of voting for at least one anti-abortion bill
-barplot(party_means,
-        main = "Distribution of Anti-Abortion Bill Votes by Party",
-        xlab = "Party",
-        ylab = "Distribution",
-        col = "indianred",
-        border = "white")
-
-
-# Boxplot for Ideology Score by Sex
-boxplot(np_score_2 ~ Female, data = anti_a,
-        names = c("Female", "Male"),
-        ylab = "Ideology Score",
-        xlab = "Sex",
-        main = "Ideology Score by Sex",
-        las = 1, col = "violetred2",
-        frame = FALSE)
 ```
 
-## Analysis
+Another factor that has an appreciable effect was the majority party in the state house.  Specifically looking at the interaction between the np_score_2 and rep_control variables, given the fact that there is Democratic control of the state house or a 50-50 split, there is a 2.2 percentage point increase in sponsorship of at least one anti-abortion bill for every 1 unit increase in NP score (this translates to a shift toward a more conservative ideology), which is statistically significant at an alpha of 0.05. The reasoning behind this might be that a bill could be of more importance or carry more weight when the opposite party is in control of the state house, potentially causing female legislators or a certain party to voice concerns at a greater rate or be more active and willing to vote against or for a bill.  In other words, one party actively voicing concern, engaging in debate, and ultimately voting may galvanize the party not in power.
 
-Our main relationship of interest is between sponsorship of anti-abortion bills and gender, ideology, and party.  We find that conservative Republican women are the most likely to sponsor at least one anti-abortion rights bill of any type (insert Distribution of Voting for Anti-Abortion Bills by Gender and Composite Measure).  The group that is least likely to do so is liberal Democratic men, which according to the IPG8 variable, is group 8.  Breaking this down to the three different issue frames, anti-abortion bills that adhere to a “pro-life pro-woman” issue frame see the greatest distribution of support from conservative Republican women, followed by a religious or moral issue frame and, finally, a fetal centric one (insert issue frame distributions here).
-
-Another factor that has an appreciable effect was how competitive the environment was during the legislator’s session.  Specifically looking at the interaction between the Female and competitive variables, given the fact that the legislator is Female, there is a 1.5 percentage point increase in sponsorship of at least one anti-abortion bill when the environment is competitive, which is statistically significant at an alpha of 0.05. Reasoning behind this might be that a bill could be of more importance or carry more weight when the partisan environment is more competitive between parties, potentially causing female legislators or a certain party to voice concerns at a greater rate or be more active and willing to vote against or for a bill.  In other words, one party actively voicing concern, engaging in debate, and ultimately voting may cause the other party to rally and do the same when the environment is more competitive.
-
-To further analyze these bill types and their relationship to certain legislators, we ran linear model regressions to find their strength and magnitude. When looking at the relationship between a female legislator and sponsorship of at least one anti-abortion bill that adheres to a “pro-life pro-woman” issue frame when the environment is competitive, given a female legislator, there is a 0.7 percentage point increase in sponsorship. This value showed to be statistically significant at an alpha of 0.05. When it comes to anti-abortion bills that have a fetal centric framework, given a female legislator, there is a 0.5 percentage point increase in sponsorship of at least one anti-abortion bill that adheres to a fetal issue frame when the environment is competitive. This value is also statistically significant at an alpha of 0.05. Finally, for bills that adhere to a religious or moral issue frame, given a female legislator, there is a 0.2 percentage point increase in sponsorship of at least one anti-abortion bill of this type when the environment is competitive. A summary of this regression showed this value to be statistically significant at an alpha of 0.05 as well. In a separate model where party and a competitive environment is held constant, given a female legislator, there is a 1.1 point increase in the sponsorship of at least one anti-abortion bill. This value shows to be significant at a 0.05 alpha. Given a republican male, there is a 5.7 point increase in sponsorship of at least one anti-abortion bill. This also shows to be statistically significant at a 0.05 and 0.01 alpha. Additionally, while examining the interaction between a legislators sex, party, and whether or not the environment is competitive, given a Republican female legislator, there is 3.4 percentage point increase in sponsorship of at least one anti-abortion bill when the environment is competitive.  This value also shows to be statistically significant at an alpha of 0.05.
-	
-
-```{r Regressions, echo=FALSE, results="asis"}
-
+```{r Regressions1, echo=FALSE, results = "asis"}
 female_all_fit <- lm(anti_a$bin_anti_all ~ anti_a$Female)
-
 np_all_fit <- lm(anti_a$bin_anti_all ~ anti_a$np_score_2)
-
 party_all_fit <- lm(anti_a$bin_anti_all ~ anti_a$party)
 
-female_all_interaction_fit <- 
-        lm(bin_anti_all ~ Female*competitive, data = anti_a)
-female_womtot_interaction_fit <- 
-        lm(bin_anti_womtot ~ Female*competitive, data = anti_a)
-female_fetus_interaction_fit <- 
-        lm(bin_anti_fetus ~ Female*competitive, data = anti_a)
-female_relig_interaction_fit <- 
-        lm(bin_anti_relig ~ Female*competitive, data = anti_a)
+score_all_interaction_fit <- 
+        lm(bin_anti_all ~ np_score_2*rep_control, data = anti_a)
+score_womtot_interaction_fit <- 
+        lm(bin_anti_womtot ~ np_score_2*rep_control, data = anti_a)
+score_fetus_interaction_fit <- 
+        lm(bin_anti_fetus ~ np_score_2*rep_control, data = anti_a)
+score_relig_interaction_fit <- 
+        lm(bin_anti_relig ~ np_score_2*rep_control, data = anti_a)
+
+
+stargazer::stargazer(score_all_interaction_fit,
+                     title = "Linear Regression Models for NP Score and Republican Control of State House's 
+                     Effect on Voting for Anti-Abortion Bills",
+                      covariate.labels = c("NP Score",
+                                           "Republican Majority in State House",
+                                           "NP Score and Republican Majority in State House Interaction"),
+                     dep.var.labels = "Voting for an Anti-Abortion Bill",
+                     header = FALSE)
+stargazer::stargazer(score_fetus_interaction_fit,
+                     title = "Linear Regression Models for NP Score and Republican Control of State House's 
+                     Effect on Voting for Fetal-Centric Anti-Abortion Bills",
+                      covariate.labels = c("NP Score",
+                                           "Republican Majority in State House",
+                                           "NP Score and Republican Majority in State House Interaction"),
+                     dep.var.labels = "Voting for Fetal-Centric Anti-Abortion Bills",
+                     header = FALSE)
+
+stargazer::stargazer(score_relig_interaction_fit,
+                     title = "Linear Regression Models for NP Score and Republican Control of State House's 
+                     Effect on Voting for Anti-Abortion Bills with a Religious or Moral 
+                     Framework",
+                      covariate.labels = c("NP Score",
+                                           "Republican Majority in State House",
+                                           "NP Score and Republican Majority in State House Interaction"),
+                     dep.var.labels = "Voting for an Anti-Abortion Bill with a Religious or Moral 
+                     Framework",
+                     header = FALSE)
+
+stargazer::stargazer(score_womtot_interaction_fit,
+                     title = "Linear Regression Models for NP Score and Republican Control of State House's 
+                     Effect on Voting for Anti-Abortion Bills with a Pro-Woman Pro-Life
+                     Framework",
+                      covariate.labels = c("NP Score",
+                                           "Republican Majority in State House",
+                                           "NP Score and Republican Majority in State House Interaction"),
+                     dep.var.labels = "Voting for an Anti-Abortion Bill with a Pro-Woman Pro-Life
+                     Framework",
+                     header = FALSE)
+```
+
+\newpage
+To further analyze these bill types and their relationship to certain legislators, we ran linear model regressions to find their strength and magnitude. When looking at the relationship between a female legislator and sponsorship of at least one anti-abortion bill that adheres to a “pro-life pro-woman” issue frame when the environment is competitive, given a female legislator, there is a 0.7 percentage point increase in sponsorship. This value proved not to be statistically significant at an alpha of 0.05. When it comes to anti-abortion bills that have a fetal centric framework, given a female legislator, there is a 0.5 percentage point increase in sponsorship of at least one anti-abortion bill that adheres to a fetal issue frame when the environment is competitive. This value is also prove not to be statistically significant at an alpha of 0.05. Finally, for bills that adhere to a religious or moral issue frame, given a female legislator, there is a 0.2 percentage point increase in sponsorship of at least one anti-abortion bill of this type when the environment is competitive. A summary of this regression showed this value not to be statistically significant at an alpha of 0.05 as well. In a separate model where party and a competitive environment is held constant, given a female legislator, there is a 1.1 point increase in the sponsorship of at least one anti-abortion bill. This value shows not to be significant at a 0.05 alpha. Given a republican male, there is a 5.7 point increase in sponsorship of at least one anti-abortion bill. This also shows to be statistically significant at a 0.05 and 0.01 alpha. Additionally, while examining the interaction between a legislators sex, party, and whether or not the environment is competitive, given a Republican female legislator, there is 3.4 percentage point increase in sponsorship of at least one anti-abortion bill when the environment is competitive.  This value also shows not to be statistically significant at an alpha of 0.05.  In both models, the only statistically significant values at an alpha of 0.05 were that of the Republican party and women when coupled with the party variable.
+
+```{r Regressions2, echo=FALSE, results="asis"}
 complex <- 
         lm(anti_a$bin_anti_all ~ anti_a$party + 
                    anti_a$Female + anti_a$competitive)
@@ -228,59 +278,18 @@ complex2 <-
         lm(anti_a$bin_anti_all ~ anti_a$party* 
                    anti_a$Female*anti_a$competitive)
 
-stargazer::stargazer(female_all_interaction_fit,
-                     title = "Linear Regression Models for Sex and Competition's 
-                     Effect on Voting for Anti-Abortion Bills",
-                      covariate.labels = c("Female",
-                                           "Competition",
-                                           "Female and Competition Interaction"),
-                     dep.var.labels = "Voting for an Anti-Abortion Bill",
-                     header = FALSE)
-stargazer::stargazer(female_fetus_interaction_fit,
-                     title = "Linear Regression Models for Sex and Competition's 
-                     Effect on Voting for Fetal-Centric Anti-Abortion Bills",
-                      covariate.labels = c("Female",
-                                           "Competition",
-                                           "Interaction between Female and Competition"),
-                     dep.var.labels = "Voting for Fetal-Centric Anti-Abortion Bills",
-                     header = FALSE)
-
-stargazer::stargazer(female_relig_interaction_fit,
-                     title = "Linear Regression Models for Sex and Competition's 
-                     Effect on Voting for Anti-Abortion Bills with a Religious or Moral 
-                     Framework",
-                      covariate.labels = c("Female",
-                                           "Competition",
-                                           "Interaction between Female and Competition"),
-                     dep.var.labels = "Voting for an Anti-Abortion Bill with a Religious or Moral 
-                     Framework",
-                     header = FALSE)
-
-stargazer::stargazer(female_womtot_interaction_fit,
-                     title = "Linear Regression Models for Sex and Competition's 
-                     Effect on Voting for Anti-Abortion Bills with a Pro-Woman Pro-Life
-                     Framework",
-                      covariate.labels = c("Female",
-                                           "Competition",
-                                           "Interaction between Female and Competition"),
-                     dep.var.labels = "Voting for an Anti-Abortion Bill with a Pro-Woman Pro-Life
-                     Framework",
-                     header = FALSE)
-
-
 stargazer::stargazer(complex,
                      title = "Linear Regression Models for Sex and Competition's 
                      Effect on Voting for Anti-Abortion Bills",
-                     covariate.labels = c("Female",
-                                          "Competition",
-                                          "Interaction between Female and Competition"),
+                     covariate.labels = c("Party",
+                                          "Female",
+                                          "Competitive"),
                      dep.var.labels = "Voting for an Anti-Abortion Bill",
                      header = FALSE)
-
 ```
 ## Conclusion
 
-Based on our results, we reject part of our null hypothesis.  While we correctly hypothesized that conservative Republican women are most likely to support anti-abortion bills that adhere to a “pro-life, pro-woman” issue frame, conservative Republican men actually voted for anti abortion bills with a fetal framework at a lower rate than conservative Republican women.  Though conservative Republican women make up the greatest percentage of votes for anti-abortion bills across all three issue frames, the intuition in our null hypothesis is partially supported; the differential between conservative Republican women and conservative Republican men is greater for the “pro-life, pro-woman” issue frame (~5.62 percentage points) than for the fetal issue frame (~0.49 percentage points).
+Based on our results, we reject part of our first null hypothesis.  While we correctly hypothesized that conservative Republican women are most likely to support anti-abortion bills that adhere to a “pro-life, pro-woman” issue frame, conservative Republican men actually voted for anti abortion bills with a fetal framework at a lower rate than conservative Republican women.  Though conservative Republican women make up the greatest percentage of votes for anti-abortion bills across all three issue frames, the intuition in our null hypothesis is partially supported; the differential between conservative Republican women and conservative Republican men is greater for the “pro-life, pro-woman” issue frame (~5.62 percentage points) than for the fetal issue frame (~0.49 percentage points).  We fail to reject our second null hypothesis that party has a larger effect on support of anti-abortion bills than gender.
 
 A limitation of our analysis is that there are likely other confounding variables that we cannot take into account with this specific replication dataset. It is important to note that the analysis of this data should not be interpreted as causal. Parties and the individuals in them were not randomized, people often self-select to become engaged with politics, and there are a plethora of confounding variables that could have been at play, as the real world, especially when it comes to politics, is very messy and this data does not come from a randomized experiment. Potential confounders include factors such as party pressure to vote a certain way, social pressures by voting constituents, the popularization of certain movements and efforts such as the Women’s March, as well as personal information about legislators that impact how they vote, such as if they have daughters, if they know someone who has had an abortion, and many other things that are very difficult to add to a regression.  
 
@@ -356,12 +365,8 @@ lm(anti_a$bin_anti_womtot ~ anti_a$party)
 # I = .039299, I is surprisingly the highest here, followed by R, and then D
 
 
-complex <- lm(anti_a$bin_anti_all ~ anti_a$party + anti_a$Female + anti_a$competitive)
-summary(complex)
-
-
 score_all_interaction_fit <- lm(bin_anti_all ~ np_score_2*rep_control, data = anti_a)
-score_all_interaction_fit
+summary(score_all_interaction_fit)
 #Assuming Democratic control of the state house or a 50-50 split, a one unit increase in np score leads to around a 2.6 percentage point increase in the likelihood of sponsorship of at least one anti-abortion bill
 #This is lower than the percentage point increase in the regression of just bin_anti_all on np_score_2
 
@@ -376,8 +381,15 @@ score_relig_interaction_fit
 summary(lm(bin_anti_all ~ np_score_2*competitive, data = anti_a))
 #very statistically significant interaction coefficient, and based on this and the last regression, competitive seems to be a pretty strong marker
 
-summary(lm(bin_anti_all ~ competitive*party*Female, data = anti_a))
-#don't know how we would incorporate this one, but it may be interesting to paint the narrative that Republican women in a competitive political environment are forced to vote a certain way by their party (or we can talk about them being the hidden majority because we typically conjure an image of white conservative men being resistant to social change)
+female_all_interaction_fit <- 
+        lm(bin_anti_all ~ Female*competitive, data = anti_a)
+female_womtot_interaction_fit <- 
+        lm(bin_anti_womtot ~ Female*competitive, data = anti_a)
+female_fetus_interaction_fit <- 
+        lm(bin_anti_fetus ~ Female*competitive, data = anti_a)
+female_relig_interaction_fit <- 
+        lm(bin_anti_relig ~ Female*competitive, data = anti_a)
+#both gender and a competitive partisan environment are not strong indicators of likelihood of sponsorship of at least one anti-abortion bill
 ```
 
 
