@@ -21,7 +21,7 @@ library(kableExtra)
 
 ## Introduction 
 
-Throughout the year of 2020, and even 2019, the case Roe v. Wade has been brought into question multiple times, and many news sources have warned readers that it has a chance of being overturned while state and federal administrations shift, and new Supreme Court nominees are considered. Abortion, while politicized in the sixties, has become a rather polarizing subject among politicians and parties. The question of a woman’s right to abortion has even found itself in speeches of those running for precedent, and clearly is a subject of importance to the American people and women’s health, freedom, and privacy. 
+Throughout the year of 2020, and even 2019, the case Roe v. Wade has been brought into question multiple times, and many news sources have warned readers that it has a chance of being overturned while state and federal administrations shift, and new Supreme Court nominees are considered. Abortion, while politicized in the sixties, has become a rather polarizing subject among politicians and parties. The question of a woman’s right to abortion has even found itself in speeches of those running for president, and clearly is a subject of importance to the American people and women’s health, freedom, and privacy. 
 
 While it is easy to assume that those who are anti-abortion dont have the ability to bear a child and are male, while those who are pro-abortion or pro-choice are females and can bear children, this study aims to look beyond such assumptions. Looking beyond sex and into party and ideology, for example, can give more information to voters and pro-abortion activists regarding what a legislative body looks like and the chances of abortion rights being strengthened or weakened. 
 
